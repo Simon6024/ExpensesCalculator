@@ -4,3 +4,6 @@ ExpensesCalculator/obj
 Transactions/.vs
 Transactions/bin
 Transactions/obj
+Transactions/Transactions.jfm
+Transactions/Transactions.dbmdl
+Transactions/Transactions.sqlproj.user
