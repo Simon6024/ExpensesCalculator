@@ -1,64 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Transactions" Class="TransactionsDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
   <Connection Mode="AppSettings" ConnectionString="Data Source=localhost\SQLEXPRESS;Initial Catalog=Transactions;Integrated Security=True" SettingsObjectName="ExpensesCalculator.Properties.Settings" SettingsPropertyName="TransactionsConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="trx.Transactions" Member="Transactions">
-    <Type Name="Transaction">
-      <Column Name="DATE" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-      <Column Name="ACCOUNT" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="AMOUNT" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
-      <Column Name="COMMENT" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Column Name="ID_TRX_TYPE" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="NAME" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Association Name="Account_Transaction" Member="Account1" ThisKey="ACCOUNT" OtherKey="ACCOUNT" Type="Account" IsForeignKey="true" />
-      <Association Name="Transaction_Type_Transaction" Member="Transaction_Type" ThisKey="ID_TRX_TYPE" OtherKey="ID_TRX_TYPE" Type="Transaction_Type" IsForeignKey="true" />
-      <Association Name="Source_Transaction" Member="Source" ThisKey="NAME" OtherKey="NAME" Type="Source" IsForeignKey="true" />
-    </Type>
-  </Table>
-  <Table Name="trx.Accounts" Member="Accounts">
-    <Type Name="Account">
-      <Column Name="BANK" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="ACCOUNT" Type="System.String" DbType="VarChar(255) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="ACCOUNT_TYPE" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
-      <Column Name="COMMENT" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Association Name="Account_Transaction" Member="Transactions" ThisKey="ACCOUNT" OtherKey="ACCOUNT" Type="Transaction" />
-      <Association Name="Account_Type_Account" Member="Account_Type1" ThisKey="ACCOUNT_TYPE" OtherKey="ACCOUNT_TYPE" Type="Account_Type" IsForeignKey="true" />
-    </Type>
-  </Table>
   <Table Name="trx.Account_Types" Member="Account_Types">
     <Type Name="Account_Type">
       <Column Name="ACCOUNT_TYPE" Type="System.String" DbType="VarChar(255) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="Account_Type_Account" Member="Accounts" ThisKey="ACCOUNT_TYPE" OtherKey="ACCOUNT_TYPE" Type="Account" />
+      <Association Name="Account_Type_Account" Member="Accounts" ThisKey="ACCOUNT_TYPE" OtherKey="ACCOUNT_TYPE_FK" Type="Account" />
     </Type>
   </Table>
   <Table Name="trx.Categories" Member="Categories">
     <Type Name="Category">
       <Column Name="CATEGORY" Type="System.String" DbType="VarChar(255) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Association Name="Category_TypeCategory" Member="TypeCategories" ThisKey="CATEGORY" OtherKey="CATEGORY" Type="TypeCategory" />
+      <Association Name="Category_TypeCategory" Member="TypeCategories" ThisKey="CATEGORY" OtherKey="CATEGORY_FK" Type="TypeCategory" />
     </Type>
   </Table>
   <Table Name="trx.Transaction_Type" Member="Transaction_Types">
     <Type Name="Transaction_Type">
       <Column Name="ID_TRX_TYPE" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="COMMENT" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
-      <Association Name="Transaction_Type_Transaction" Member="Transactions" ThisKey="ID_TRX_TYPE" OtherKey="ID_TRX_TYPE" Type="Transaction" />
-      <Association Name="Transaction_Type_TypeCategory" Member="TypeCategories" ThisKey="ID_TRX_TYPE" OtherKey="ID_TRX_TYPE" Type="TypeCategory" />
-      <Association Name="Transaction_Type_Source" Member="Sources" ThisKey="ID_TRX_TYPE" OtherKey="ID_TRX_TYPE" Type="Source" />
+      <Association Name="Transaction_Type_Transaction" Member="Transactions" ThisKey="ID_TRX_TYPE" OtherKey="ID_TRX_TYPE_FK" Type="Transaction" />
+      <Association Name="Transaction_Type_TypeCategory" Member="TypeCategories" ThisKey="ID_TRX_TYPE" OtherKey="ID_TRX_TYPE_FK" Type="TypeCategory" />
+      <Association Name="Transaction_Type_Source" Member="Sources" ThisKey="ID_TRX_TYPE" OtherKey="ID_TRX_TYPE_FK" Type="Source" />
+    </Type>
+  </Table>
+  <Table Name="trx.Transactions" Member="Transactions">
+    <Type Name="Transaction">
+      <Column Name="DATE" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="ACCOUNT_FK" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="AMOUNT" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="COMMENT" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="ID_TRX_TYPE_FK" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="SOURCE_FK" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ID_TRX" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TYPE_FROM_SOURCE" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="Transaction_Type_Transaction" Member="Transaction_Type" ThisKey="ID_TRX_TYPE_FK" OtherKey="ID_TRX_TYPE" Type="Transaction_Type" IsForeignKey="true" />
+      <Association Name="Source_Transaction" Member="Source" ThisKey="SOURCE_FK" OtherKey="NAME" Type="Source" IsForeignKey="true" />
+      <Association Name="Account_Transaction" Member="Account" ThisKey="ACCOUNT_FK" OtherKey="ACCOUNT" Type="Account" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="trx.TypeCategories" Member="TypeCategories">
     <Type Name="TypeCategory">
-      <Column Name="ID_TRX_TYPE" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="CATEGORY" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="ID_TRX_TYPE_FK" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CATEGORY_FK" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
       <Column Name="PERCENTAGE" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
-      <Association Name="Category_TypeCategory" Member="Category1" ThisKey="CATEGORY" OtherKey="CATEGORY" Type="Category" IsForeignKey="true" />
-      <Association Name="Transaction_Type_TypeCategory" Member="Transaction_Type" ThisKey="ID_TRX_TYPE" OtherKey="ID_TRX_TYPE" Type="Transaction_Type" IsForeignKey="true" />
+      <Column Name="ID_TYP_CAT" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Association Name="Category_TypeCategory" Member="Category" ThisKey="CATEGORY_FK" OtherKey="CATEGORY" Type="Category" IsForeignKey="true" />
+      <Association Name="Transaction_Type_TypeCategory" Member="Transaction_Type" ThisKey="ID_TRX_TYPE_FK" OtherKey="ID_TRX_TYPE" Type="Transaction_Type" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="trx.Source" Member="Sources">
     <Type Name="Source">
       <Column Name="NAME" Type="System.String" DbType="VarChar(255) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="ID_TRX_TYPE" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Association Name="Source_Transaction" Member="Transactions" ThisKey="NAME" OtherKey="NAME" Type="Transaction" />
-      <Association Name="Transaction_Type_Source" Member="Transaction_Type" ThisKey="ID_TRX_TYPE" OtherKey="ID_TRX_TYPE" Type="Transaction_Type" IsForeignKey="true" />
+      <Column Name="ID_TRX_TYPE_FK" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Source_Transaction" Member="Transactions" ThisKey="NAME" OtherKey="SOURCE_FK" Type="Transaction" />
+      <Association Name="Transaction_Type_Source" Member="Transaction_Type" ThisKey="ID_TRX_TYPE_FK" OtherKey="ID_TRX_TYPE" Type="Transaction_Type" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="trx.Accounts" Member="Accounts">
+    <Type Name="Account">
+      <Column Name="BANK" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ACCOUNT" Type="System.String" DbType="VarChar(255) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ACCOUNT_TYPE_FK" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="COMMENT" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="FILENAME" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="TEMPLATE" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Account_Transaction" Member="Transactions" ThisKey="ACCOUNT" OtherKey="ACCOUNT_FK" Type="Transaction" />
+      <Association Name="Account_Type_Account" Member="Account_Type" ThisKey="ACCOUNT_TYPE_FK" OtherKey="ACCOUNT_TYPE" Type="Account_Type" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>
