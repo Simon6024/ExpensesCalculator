@@ -1,0 +1,5 @@
+﻿CREATE TABLE [trx].[Account_Types] (
+    [ACCOUNT_TYPE] VARCHAR (255) NOT NULL,
+    CONSTRAINT [PK_Account_Types] PRIMARY KEY CLUSTERED ([ACCOUNT_TYPE] ASC)
+);
+

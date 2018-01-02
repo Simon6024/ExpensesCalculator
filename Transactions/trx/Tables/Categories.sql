@@ -1,0 +1,5 @@
+﻿CREATE TABLE [trx].[Categories] (
+    [CATEGORY] VARCHAR (255) NOT NULL,
+    CONSTRAINT [PK_Categories] PRIMARY KEY CLUSTERED ([CATEGORY] ASC)
+);
+

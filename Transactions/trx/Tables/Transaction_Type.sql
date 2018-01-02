@@ -1,0 +1,6 @@
+﻿CREATE TABLE [trx].[Transaction_Type] (
+    [ID_TRX_TYPE] INT           IDENTITY (1, 1) NOT NULL,
+    [COMMENT]     VARCHAR (255) NULL,
+    PRIMARY KEY CLUSTERED ([ID_TRX_TYPE] ASC)
+);
+
