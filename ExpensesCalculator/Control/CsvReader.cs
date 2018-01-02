@@ -12,7 +12,7 @@ namespace ExpensesCalculator.Control
         static string path = ConfigurationManager.AppSettings["CsvPath"];
 
         public List<FileContent> GetAllFilesContent()
-        {             
+        {
             List<FileContent> AllFileContent = new List<FileContent>();
 
             foreach (string filePath in Directory.GetFiles(path))

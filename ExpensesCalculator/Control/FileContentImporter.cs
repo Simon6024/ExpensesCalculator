@@ -18,7 +18,7 @@ namespace ExpensesCalculator.Control
 
             foreach (var content in AllFilesContent)
             {
-                var curAcc = accounts.First(a => a.FILENAME.Equals(content.FileName));
+                var curAcc = accounts.First(a => content.FileName.Contains(a.FILENAME));
                 Console.WriteLine($"Importing transactions from file: {content.FileName} for account {curAcc.ACCOUNT}...");
                 var t = (TransactionGenerator)Activator.CreateInstance(Type.GetType("ExpensesCalculator.Control." + curAcc.TEMPLATE));
                 var trxs = t.GetTransactions(content.Content, curAcc);
@@ -35,8 +35,9 @@ namespace ExpensesCalculator.Control
                 Console.WriteLine("Saving transactions...");
                 _transactionDal.Insert(trxs);
 
+                //Archiving file
                 Console.WriteLine($"Done with file : {content.FileName} for account {curAcc.ACCOUNT}...\nArchiving...");
-                reader.Archive(content.FileName);                
+                reader.Archive(content.FileName);
             }
         }
 
@@ -46,7 +47,7 @@ namespace ExpensesCalculator.Control
             var newSources = new List<Source>();
 
             foreach (var t in trx)
-            {                
+            {
                 if (sources.ContainsKey(t.SOURCE_FK))
                 {
                     sources.TryGetValue(t.SOURCE_FK, out Source source);
