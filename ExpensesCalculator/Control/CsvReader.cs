@@ -8,12 +8,11 @@ namespace ExpensesCalculator.Control
 
     public class CsvReader
     {
-
-        char delimitor = ',';
+        static char delimitor = ',';
+        static string path = ConfigurationManager.AppSettings["CsvPath"];
 
         public List<FileContent> GetAllFilesContent()
-        {
-            var path = ConfigurationManager.AppSettings["CsvPath"];
+        {             
             List<FileContent> AllFileContent = new List<FileContent>();
 
             foreach (string filePath in Directory.GetFiles(path))
@@ -34,6 +33,11 @@ namespace ExpensesCalculator.Control
         {
             var lines = File.ReadAllLines(file).Select(a => a.Split(delimitor)).ToList();
             return lines;
+        }
+
+        public void Archive(string fileName)
+        {
+            File.Move(path + fileName, path + "Archive\\" + fileName + DateTime.Today.ToString("yyyy-MM-dd"));
         }
     }
 

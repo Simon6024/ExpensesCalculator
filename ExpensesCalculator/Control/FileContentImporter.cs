@@ -35,9 +35,9 @@ namespace ExpensesCalculator.Control
                 Console.WriteLine("Saving transactions...");
                 _transactionDal.Insert(trxs);
 
-                Console.WriteLine($"Done with file : {content.FileName} for account {curAcc.ACCOUNT}...");
+                Console.WriteLine($"Done with file : {content.FileName} for account {curAcc.ACCOUNT}...\nArchiving...");
+                reader.Archive(content.FileName);                
             }
-
         }
 
         public void AddSourcesAndCategories(ref List<Transaction> trx)
@@ -65,7 +65,7 @@ namespace ExpensesCalculator.Control
         public void RemovePreviouslyTreatedTransactions(ref List<Transaction> trxs, Account account)
         {
             var i = _transactionDal.GetTrxBoundaries(account);
-            trxs.RemoveAll(t => t.DATE < i.UpperBound && t.DATE > i.LowerBound);
+            trxs.RemoveAll(t => t.DATE <= i.UpperBound && t.DATE >= i.LowerBound);
         }
 
     }
