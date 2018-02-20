@@ -51,8 +51,12 @@ namespace ExpensesCalculator.Control
                 if (sources.ContainsKey(t.SOURCE_FK))
                 {
                     sources.TryGetValue(t.SOURCE_FK, out Source source);
-                    t.ID_TRX_TYPE_FK = source.ID_TRX_TYPE_FK;
-                    t.TYPE_FROM_SOURCE = true;
+
+                    if (source.ID_TRX_TYPE_FK.HasValue)
+                    { 
+                        t.ID_TRX_TYPE_FK = source.ID_TRX_TYPE_FK;
+                        t.TYPE_FROM_SOURCE = true;
+                    }
                 }
                 else if (!newSources.Any(s => s.NAME == t.SOURCE_FK))
                 {
